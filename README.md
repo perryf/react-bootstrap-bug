@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+## Describe the bug
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+I am having an issue with `react-bootstrap` Dropdowns/DropdownButtons in IE11. Everything seems to work fine opening and closing Dropdown buttons and menus normally. However, if you happen to have a Modal which you open and close, and then click on a Dropdown, the Dropdown will no longer open.
 
-## Available Scripts
+## To Reproduce
 
-In the project directory, you can run:
+Open a Modal. Close a Modal. Then click on a Dropdown Menu.
 
-### `npm start`
+### Dependencies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+	"dependencies": {
+		"bootstrap": "^4.6.0",
+		"react": "^17.0.1",
+		"react-app-polyfill": "^2.0.0",
+		"react-bootstrap": "^1.4.3",
+		"react-dom": "^17.0.1",
+		"react-scripts": "^4.0.2"
+	}
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### index.js
 
-### `npm test`
+```
+import 'react-app-polyfill/ie11' // For IE 11 support
+import 'react-app-polyfill/stable'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import App from './App'
+import './index.css'
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ReactDOM.render(
+	<React.StrictMode>
+		<App />
+	</React.StrictMode>,
+	document.getElementById('root')
+)
+```
 
-### `npm run build`
+### App.js
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+import React, { useState } from 'react'
+import { Button, Modal, DropdownButton, Dropdown } from 'react-bootstrap'
+const App = () => {
+	const [showModal, setShowModal] = useState(false)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+	const handleClose = () => setShowModal(false)
+	const handleShow = () => setShowModal(true)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+	return (
+		<div>
+			<h1>Dropdown Test</h1>
+			<Button onClick={handleShow}>Open Modal</Button>
 
-### `npm run eject`
+			<DropdownButton
+				id="dropdown-test"
+				title="Dropdown Button"
+				variant="secondary"
+			>
+				<Dropdown.Item>1</Dropdown.Item>
+				<Dropdown.Item>2</Dropdown.Item>
+				<Dropdown.Item>3</Dropdown.Item>
+			</DropdownButton>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+			<Modal show={showModal} onHide={handleClose} backdrop="static">
+				<Modal.Header>Hiya!</Modal.Header>
+				<Modal.Body>
+					<Button onClick={handleClose}>Close</Button>
+				</Modal.Body>
+			</Modal>
+		</div>
+	)
+}
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+export default App
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Minimal example by using [CodeSandbox](https://codesandbox.io/s/github/react-bootstrap/code-sandbox-examples/tree/master/basic).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Environment (please complete the following information)
 
-## Learn More
+- Operating System: Windows 10
+- Browser - IE11
+- React-Bootstrap Version 4.6.0
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Additional Information
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+After downgrading to react and react-dom to v16.14, I could then get the dropdown menus to open and close after opening/closing a modal.
