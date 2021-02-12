@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Modal, Dropdown, DropdownButton } from 'react-bootstrap'
-import DropdownItem from 'react-bootstrap/esm/DropdownItem'
-
+import { Button, Modal, DropdownButton, Dropdown } from 'react-bootstrap'
 const App = () => {
 	const [showModal, setShowModal] = useState(false)
 
@@ -18,9 +16,9 @@ const App = () => {
 				title="Dropdown Button"
 				variant="secondary"
 			>
-				<DropdownItem>1</DropdownItem>
-				<DropdownItem>2</DropdownItem>
-				<DropdownItem>3</DropdownItem>
+				<Dropdown.Item>1</Dropdown.Item>
+				<Dropdown.Item>2</Dropdown.Item>
+				<Dropdown.Item>3</Dropdown.Item>
 			</DropdownButton>
 
 			<Modal
